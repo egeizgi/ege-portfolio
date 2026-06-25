@@ -31,77 +31,11 @@ const NAV = [
   { id: "contact", label: "İletişim" },
 ];
 
-const PROJECTS = [
-  {
-    title: "HaberDedektif — Gerçeklik Analiz Aracı",
-    stack: ["Python", "FastAPI", "Pandas", "LLM"],
-    desc:
-      "Twitter/RSS'ten haber toplayan, özetleyen ve çok-kaynaklı tutarlılık analizi yapan sistem.",
-    links: [
-      { label: "GitHub", href: "#" },
-      { label: "Demo", href: "#" },
-    ],
-    year: 2025,
-  },
-  {
-    title: "SIS — Öğrenci Bilgi Sistemi (CLI)",
-    stack: ["Python", "JSON", "CLI"],
-    desc:
-      "Modüler yapı, JSON veri saklama, menü tabanlı arayüz; ders/ödev/katılım takibi.",
-    links: [{ label: "GitHub", href: "#" }],
-    year: 2025,
-  },
-  {
-    title: "Proc Explorer — mini top (C)",
-    stack: ["C", "CMake", "Valgrind"],
-    desc:
-      "PID/CPU%/RSS gösteren, filtreleme & sıralama destekli hafif sistem aracı.",
-    links: [{ label: "GitHub", href: "#" }],
-    year: 2025,
-  },
-  {
-    title: "GenZ Flex — Landing",
-    stack: ["Next.js", "Tailwind"],
-    desc: "Giyim markası için minimal landing sayfası ve koleksiyon grid'i.",
-    links: [{ label: "Live", href: "#" }],
-    year: 2025,
-  },
-];
-
-const POSTS = [
-  {
-    title: "Kaggle: Spaceship Titanic — Özellik Mühendisliği Notları",
-    href: "#",
-    date: "2025-09-18",
-  },
-  { title: "C'de Bellek Yönetimi: malloc/free ipuçları", href: "#", date: "2025-08-02" },
-  { title: "PyTorch Batch Mantığı — Görselleştirmeyle", href: "#", date: "2025-10-15" },
-];
-
 // ---------------------- Runtime Tests ------------------------
 (function runBasicTests(){
   // NAV testleri
   assert(Array.isArray(NAV), "NAV bir dizi olmalı");
   assert(NAV.every(n => typeof n.id === "string" && typeof n.label === "string"), "NAV öğeleri string olmalı");
-
-  // PROJECTS testleri
-  assert(Array.isArray(PROJECTS), "PROJECTS bir dizi olmalı");
-  PROJECTS.forEach(p => {
-    assert(typeof p.title === "string", "Project.title string olmalı");
-    assert(Array.isArray(p.stack) && p.stack.every(s => typeof s === "string"), "Project.stack string[] olmalı");
-    assert(typeof p.desc === "string", "Project.desc string olmalı");
-    assert(typeof p.year === "number", "Project.year number olmalı");
-    if (p.links) {
-      assert(Array.isArray(p.links) && p.links.every(l => typeof l.label === "string" && typeof l.href === "string"),
-        "Project.links [{label:string, href:string}] olmalı");
-    }
-  });
-
-  // POSTS testleri
-  assert(Array.isArray(POSTS), "POSTS bir dizi olmalı");
-  POSTS.forEach(x => {
-    assert(typeof x.title === "string" && typeof x.href === "string" && typeof x.date === "string", "POSTS alanları string olmalı");
-  });
 })();
 
 // -------------------- Presentational UI ----------------------
@@ -113,51 +47,6 @@ function Section({ id, title, children }) {
         {children}
       </div>
     </section>
-  );
-}
-
-function Tag({ children }) {
-  // DİKKAT: children yalnızca string bekliyoruz. Nesne gelirse toString eder.
-  const text = typeof children === "string" ? children : String(children);
-  return (
-    <span className="rounded-full border px-2.5 py-1 text-xs font-medium tracking-wide border-white/15">
-      {text}
-    </span>
-  );
-}
-
-function ProjectCard({ p }) {
-  // Koruma: Yanlışlıkla p.title bir nesne olursa stringe çevir
-  const title = typeof p.title === "string" ? p.title : String(p.title);
-  const desc = typeof p.desc === "string" ? p.desc : String(p.desc);
-  const year = typeof p.year === "number" ? p.year : Number(p.year) || new Date().getFullYear();
-
-  return (
-    <div className="group rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md p-5 transition-shadow hover:shadow-lg hover:shadow-black/40">
-      <div className="flex items-center justify-between">
-        <h3 className="text-base md:text-lg font-semibold tracking-tight">
-          {title}
-        </h3>
-        <span className="text-xs text-zinc-400">{year}</span>
-      </div>
-      <p className="mt-2 text-sm text-zinc-300">{desc}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {Array.isArray(p.stack) && p.stack.map((s, i) => (
-          <Tag key={`${title}-stack-${i}`}>{typeof s === "string" ? s : String(s)}</Tag>
-        ))}
-      </div>
-      <div className="mt-4 flex gap-4">
-        {Array.isArray(p.links) && p.links.map((l, i) => (
-          <a
-            key={`${title}-link-${i}`}
-            href={typeof l?.href === "string" ? l.href : "#"}
-            className="text-sm font-medium underline decoration-white/30 underline-offset-4 hover:decoration-white"
-          >
-            {typeof l?.label === "string" ? l.label : "Link"}
-          </a>
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -215,7 +104,7 @@ export default function Portfolio() {
                 Merhaba, ben Ege İzgi.
               </h1>
               <p className="mt-4 text-zinc-200 text-sm md:text-base leading-7">
-                Başkent Üniversitesi Bilgisayar Mühendisliği 2. sınıf öğrencisiyim. Büyük bir merak ve ve istekle, alanımda
+                Başkent Üniversitesi Bilgisayar Mühendisliği 3. sınıf öğrencisiyim. Büyük bir merak ve ve istekle, alanımda
                 kendimi geliştirmeye çalışıyorum. Aşağıda seçtiğim projeler, yazılar ve iletişim bilgisi.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
@@ -250,37 +139,24 @@ export default function Portfolio() {
 
           <Section id="about" title="Hakkımda">
             <p>
-              2. sınıf Bilgisayar Mühendisliği öğrencisiyim. C ile düşük seviye araçlar, Python ile veri/ML projeleri geliştiriyorum.
+              3. sınıf Bilgisayar Mühendisliği öğrencisiyim. C ile düşük seviye araçlar, Python ile veri/ML projeleri geliştiriyorum.
               Basketbol ve muay thai yapıyorum. Teknoloji ve yazılım dünyasındaki yenilikleri takip etmeyi seviyorum.
             </p>
           </Section>
 
           <Section id="projects" title="Seçili Projeler">
-            <div className="grid gap-5 md:grid-cols-2">
-              {PROJECTS.map((p, idx) => (
-                <ProjectCard key={`project-${idx}`} p={p} />
-              ))}
-            </div>
+            <div className="min-h-12" aria-label="Projeler içeriği" />
           </Section>
 
           <Section id="writing" title="Yazılar">
-            <div className="divide-y divide-white/10">
-              {POSTS.map((post, idx) => (
-                <a key={`post-${idx}`} href={post.href} className="flex items-center justify-between py-3 group">
-                  <span className="text-sm md:text-base group-hover:underline decoration-white/30 underline-offset-4">
-                    {post.title}
-                  </span>
-                  <time className="text-xs text-zinc-400">{post.date}</time>
-                </a>
-              ))}
-            </div>
+            <div className="min-h-12" aria-label="Yazılar içeriği" />
           </Section>
 
           <Section id="contact" title="İletişim">
             <div className="space-y-3">
               <p>Birlikte çalışmak veya fikir danışmak istersen mail atabilirsin.</p>
               <ul className="text-sm">
-                <li>E-posta: <a className="underline" href="mailto:egeizgi@example.com">egeizgi10@gmail.com</a></li>
+                <li>E-posta: <a className="underline" href="mailto:egeizgi10@gmail.com">egeizgi10@gmail.com</a></li>
                 <li>GitHub: <a className="underline" href="https://github.com/egeizgi" target="_blank" rel="noreferrer">github.com/egeizgi</a></li>
               </ul>
             </div>
