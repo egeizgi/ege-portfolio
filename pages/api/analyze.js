@@ -79,7 +79,7 @@ Her listede 3-6 madde olsun. Maddeler kısa ve net cümleler olsun.`;
         ],
         generationConfig: {
           temperature: 0.4,
-          maxOutputTokens: 2048,
+          maxOutputTokens: 4096,
           responseMimeType: 'application/json',
         },
       }),
