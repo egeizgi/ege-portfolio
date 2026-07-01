@@ -22,7 +22,7 @@ async function ensurePdfWorker() {
   if (pdfWorkerReady && pdfjsLibRef) return true;
   try {
     pdfjsLibRef = await import('./vendor/pdf.min.mjs');
-    pdfjsLibRef.GlobalWorkerOptions.workerSrc = './vendor/pdf.worker.min.mjs';
+    pdfjsLibRef.GlobalWorkerOptions.workerSrc = '/cv-analiz/vendor/pdf.worker.min.mjs';
     pdfWorkerReady = true;
     return true;
   } catch (e) {
