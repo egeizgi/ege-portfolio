@@ -104,13 +104,18 @@ Yanıtını SADECE aşağıdaki JSON formatında ver. Başka hiçbir metin veya 
   "eksik_yonler": ["<madde>", "<madde>", "..."],
   "ats_sorunlari": ["<format, anahtar kelime veya yapı ile ilgili somut sorun>", "..."],
   "iyilestirme_onerileri": ["<uygulanabilir, somut öneri>", "..."],
-  "ilan_uyum_analizi": <iş ilanı verildiyse 2-3 cümlelik uyum değerlendirmesi (string), verilmediyse null>
+  "ilan_uyum_analizi": <iş ilanı/meslek alanı verildiyse aşağıdaki kurala göre string, verilmediyse null>
 }
+
+"ilan_uyum_analizi" alanı için kurallar:
+- Girilen "hedef iş ilanı/meslek" anlamlı ve gerçekçi bir rol veya iş ilanı ise (örn. "Backend Developer", "Finans Analisti", tam bir ilan metni vb.), CV'nin bu role uygunluğunu 2-3 cümlede ciddi ve somut şekilde değerlendir.
+- Girilen metin anlamsız, saçma veya gerçekçi olmayan bir "meslek" ise (örn. "astronot", "padişah", "büyücü", rastgele kelime/karakterler, şaka amaçlı bir şey), bunu ciddi bir uyum analiziymiş gibi sunma. Bunun yerine 1-2 cümlede esprili ama kaba olmayan bir dille bunun gerçekçi bir hedef olmadığını belirt, sonra CV'deki içeriğe bakarak adaya gerçekçi ve uygun bir rol/alan öner.
+- Alan tamamen boş bırakıldıysa bu alanı null yap.
 
 Her listede 3-6 madde olsun. Maddeler kısa ve net cümleler olsun.`;
 
-  const userMessage = jobPosting && jobPosting.trim().length > 20
-    ? `CV METNİ:\n"""\n${cvText}\n"""\n\nHEDEF İŞ İLANI:\n"""\n${jobPosting}\n"""\n\nBu CV'yi hem genel olarak hem de bu ilana göre analiz et.`
+  const userMessage = jobPosting && jobPosting.trim().length > 1
+    ? `CV METNİ:\n"""\n${cvText}\n"""\n\nHEDEF İŞ İLANI / MESLEK:\n"""\n${jobPosting}\n"""\n\nBu CV'yi hem genel olarak hem de bu hedefe göre analiz et. Hedefin gerçekçi bir iş ilanı/meslek mi yoksa saçma/anlamsız bir girdi mi olduğuna dikkat ederek "ilan_uyum_analizi" kurallarını uygula.`
     : `CV METNİ:\n"""\n${cvText}\n"""\n\nBu CV'yi genel olarak analiz et (spesifik bir iş ilanı verilmedi, ilan_uyum_analizi alanını null bırak).`;
 
   try {
