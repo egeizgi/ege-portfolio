@@ -11,6 +11,10 @@ const nextConfig = {
         source: '/projeler/mulakat-simulatoru',
         destination: '/mulakat-simulator/index.html',
       },
+      {
+        source: '/projeler/sinav-hazirlik',
+        destination: '/sinav-hazirlik/index.html',
+      },
     ];
   },
 };

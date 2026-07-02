@@ -46,6 +46,13 @@ const PROJECTS = [
       "CV'ni ve hedeflediğin pozisyonu esas alıp yapay zekanın gerçekçi mülakat soruları sorduğu, her cevaba anında geri bildirim verdiği ve sonunda genel bir performans raporu sunduğu araç.",
     tags: ["Next.js", "Gemini API", "Multi-turn AI"],
   },
+  {
+    title: "Sınav Hazırlık",
+    href: "https://egeizgi.dev/projeler/sinav-hazirlik",
+    description:
+      "Yüklenen ders notundan yapay zekanın konuya özel çoktan seçmeli ve açık uçlu pratik sorular ile flashcard'lar ürettiği çalışma aracı.",
+    tags: ["Next.js", "Gemini API", "PDF Parsing"],
+  },
 ];
 
 // ---------------------- Runtime Tests ------------------------
