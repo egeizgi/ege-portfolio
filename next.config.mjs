@@ -7,6 +7,10 @@ const nextConfig = {
         source: '/projeler/cv-analiz',
         destination: '/cv-analiz/index.html',
       },
+      {
+        source: '/projeler/mulakat-simulatoru',
+        destination: '/mulakat-simulator/index.html',
+      },
     ];
   },
 };

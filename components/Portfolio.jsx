@@ -39,6 +39,13 @@ const PROJECTS = [
       "Yüklenen CV'yi ve hedeflenen iş ilanını Gemini AI ile analiz edip güçlü/zayıf yönler, eksikler ve somut iyileştirme önerileri sunan araç.",
     tags: ["Next.js", "Gemini API", "PDF Parsing"],
   },
+  {
+    title: "Mülakat Simülatörü",
+    href: "https://egeizgi.dev/projeler/mulakat-simulatoru",
+    description:
+      "CV'ni ve hedeflediğin pozisyonu esas alıp yapay zekanın gerçekçi mülakat soruları sorduğu, her cevaba anında geri bildirim verdiği ve sonunda genel bir performans raporu sunduğu araç.",
+    tags: ["Next.js", "Gemini API", "Multi-turn AI"],
+  },
 ];
 
 // ---------------------- Runtime Tests ------------------------
