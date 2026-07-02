@@ -31,11 +31,29 @@ const NAV = [
   { id: "contact", label: "İletişim" },
 ];
 
+const PROJECTS = [
+  {
+    title: "PRGuard AI",
+    href: "/projects/prguard-ai",
+    description:
+      "Küçük ekipler için pull request inceleyen, bug risklerini, güvenlik açıklarını ve eksik testleri merge öncesi yakalayan AI code review aracı.",
+    tags: ["Next.js", "OpenAI", "GitHub App"],
+  },
+  {
+    title: "CV Analiz",
+    href: "https://egeizgi.dev/projeler/cv-analiz",
+    description:
+      "Yüklenen CV'yi ve hedeflenen iş ilanını Gemini AI ile analiz edip güçlü/zayıf yönler, eksikler ve somut iyileştirme önerileri sunan araç.",
+    tags: ["Next.js", "Gemini API", "PDF Parsing"],
+  },
+];
+
 // ---------------------- Runtime Tests ------------------------
 (function runBasicTests(){
   // NAV testleri
   assert(Array.isArray(NAV), "NAV bir dizi olmalı");
   assert(NAV.every(n => typeof n.id === "string" && typeof n.label === "string"), "NAV öğeleri string olmalı");
+  assert(Array.isArray(PROJECTS) && PROJECTS.length > 0, "PROJECTS boş olmamalı");
 })();
 
 // -------------------- Presentational UI ----------------------
@@ -145,7 +163,33 @@ export default function Portfolio() {
           </Section>
 
           <Section id="projects" title="Seçili Projeler">
-            <div className="min-h-12" aria-label="Projeler içeriği" />
+            <div className="grid gap-4 md:grid-cols-2" aria-label="Projeler içeriği">
+              {PROJECTS.map((project) => (
+                <a
+                  key={project.title}
+                  href={project.href}
+                  className="rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-md transition hover:border-white/30 hover:bg-black/55"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+                    <span className="text-sm text-zinc-300">Detay</span>
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-zinc-200">
+                    {project.description}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-200"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </a>
+              ))}
+            </div>
           </Section>
 
           <Section id="writing" title="Yazılar">
