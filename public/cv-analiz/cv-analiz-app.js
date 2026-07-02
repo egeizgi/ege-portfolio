@@ -9,7 +9,6 @@ const formCard = document.getElementById('form-card');
 const loading = document.getElementById('loading');
 const results = document.getElementById('results');
 const jobPostingEl = document.getElementById('job-posting');
-const accessCodeEl = document.getElementById('access-code');
 
 let extractedCvText = '';
 let pdfjsLibRef = null;
@@ -103,7 +102,6 @@ analyzeBtn.addEventListener('click', async () => {
       body: JSON.stringify({
         cvText: extractedCvText,
         jobPosting: jobPostingEl.value,
-        accessCode: accessCodeEl.value,
       }),
     });
 

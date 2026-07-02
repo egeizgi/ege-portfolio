@@ -9,23 +9,21 @@
 // KAPALI olduğu sürece bu API'den asla ücret kesilmez — ücretsiz günlük/dakikalık
 // kota dolunca sadece 429 hatası döner, otomatik ücretlendirme YAPILMAZ.
 // Billing açılırsa bu koruma tamamen ortadan kalkar ve her istek ücretli hale gelir.
-// Bu yüzden: (1) o projede billing'i asla açma, (2) aşağıdaki günlük limitler ekstra
-// bir güvenlik katmanı olarak, ücretsiz kotayı kimsenin tek başına tüketmesini önler.
+// Bu yüzden: (1) o projede billing'i asla açma, (2) aşağıdaki günlük limit ekstra
+// bir güvenlik katmanı olarak, ücretsiz kotanın tek seferde tüketilmesini önler.
 
 const GEMINI_MODEL = 'gemini-3.5-flash'; // Free tier: ~15 istek/dk, 1500 istek/gün (Temmuz 2026 itibarıyla)
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
-// Ücretsiz kotanın çok altında, isteğe göre Vercel env değişkeniyle ayarlanabilir sınırlar.
+// Ücretsiz kotanın çok altında, isteğe göre Vercel env değişkeniyle ayarlanabilir günlük limit.
 // Not: Serverless fonksiyon her "cold start"ta sıfırlanır; bu yüzden kesin değil, ekstra
 // bir tampon katmandır — asıl garanti billing'in kapalı olmasıdır.
 const MAX_DAILY_REQUESTS = parseInt(process.env.MAX_DAILY_REQUESTS || '200', 10);
-const MAX_REQUESTS_PER_CODE_PER_DAY = parseInt(process.env.MAX_REQUESTS_PER_CODE_PER_DAY || '5', 10);
 
-// Modül seviyesinde (warm instance ömrü boyunca) basit sayaçlar.
+// Modül seviyesinde (warm instance ömrü boyunca) basit sayaç.
 const usageState = globalThis.__cvAnalizUsage || (globalThis.__cvAnalizUsage = {
   day: null,
   totalCount: 0,
-  perCode: new Map(),
 });
 
 function getUtcDayKey() {
@@ -37,7 +35,6 @@ function resetIfNewDay() {
   if (usageState.day !== today) {
     usageState.day = today;
     usageState.totalCount = 0;
-    usageState.perCode = new Map();
   }
 }
 
@@ -54,27 +51,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Sadece POST isteği kabul edilir.' });
   }
 
-  const { cvText, jobPosting, accessCode } = req.body || {};
-
-  // --- Basit erişim kontrolü (MVP) ---
-  // Gerçek ödeme entegrasyonu (iyzico) eklenene kadar geçici kod sistemi.
-  const validCodes = (process.env.ACCESS_CODES || '').split(',').map(c => c.trim()).filter(Boolean);
-  const requireCode = validCodes.length > 0;
-  if (requireCode && (!accessCode || !validCodes.includes(accessCode.trim()))) {
-    return res.status(402).json({ error: 'Geçersiz veya eksik erişim kodu.' });
-  }
+  const { cvText, jobPosting } = req.body || {};
 
   // --- Maliyet/kota güvenlik katmanı ---
-  // Ücretsiz kotayı tek bir kaynağın tüketmesini engellemek için ekstra sınırlar.
+  // Ücretsiz kotayı tüketmemek için basit bir günlük toplam istek limiti.
   resetIfNewDay();
-  const codeKey = (accessCode && accessCode.trim()) || 'anon';
-  const codeCount = usageState.perCode.get(codeKey) || 0;
-
   if (usageState.totalCount >= MAX_DAILY_REQUESTS) {
     return res.status(429).json({ error: 'Günlük analiz limitine ulaşıldı. Lütfen yarın tekrar deneyin.' });
-  }
-  if (codeCount >= MAX_REQUESTS_PER_CODE_PER_DAY) {
-    return res.status(429).json({ error: 'Bu kod için günlük analiz limitine ulaşıldı. Lütfen yarın tekrar deneyin.' });
   }
 
   if (!cvText || cvText.trim().length < 50) {
@@ -160,7 +143,6 @@ Her listede 3-6 madde olsun. Maddeler kısa ve net cümleler olsun.`;
 
     // Sadece başarılı (gerçekten Gemini'ye giden) istekleri say.
     usageState.totalCount += 1;
-    usageState.perCode.set(codeKey, codeCount + 1);
 
     return res.status(200).json(parsed);
   } catch (err) {
