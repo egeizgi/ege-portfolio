@@ -33,13 +33,6 @@ const NAV = [
 
 const PROJECTS = [
   {
-    title: "PRGuard AI",
-    href: "/projects/prguard-ai",
-    description:
-      "Küçük ekipler için pull request inceleyen, bug risklerini, güvenlik açıklarını ve eksik testleri merge öncesi yakalayan AI code review aracı.",
-    tags: ["Next.js", "OpenAI", "GitHub App"],
-  },
-  {
     title: "CV Analiz",
     href: "https://egeizgi.dev/projeler/cv-analiz",
     description:
