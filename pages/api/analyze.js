@@ -3,9 +3,43 @@
 // GEMINI_API_KEY ortam değişkeni Vercel proje ayarlarından girilmelidir.
 // (Vercel Dashboard > Project > Settings > Environment Variables)
 // Ücretsiz key için: https://aistudio.google.com/apikey
+//
+// MALİYET GÜVENLİĞİ (ÖNEMLİ):
+// Bu key'in bağlı olduğu Google Cloud / AI Studio projesinde billing (kredi kartı)
+// KAPALI olduğu sürece bu API'den asla ücret kesilmez — ücretsiz günlük/dakikalık
+// kota dolunca sadece 429 hatası döner, otomatik ücretlendirme YAPILMAZ.
+// Billing açılırsa bu koruma tamamen ortadan kalkar ve her istek ücretli hale gelir.
+// Bu yüzden: (1) o projede billing'i asla açma, (2) aşağıdaki günlük limitler ekstra
+// bir güvenlik katmanı olarak, ücretsiz kotayı kimsenin tek başına tüketmesini önler.
 
 const GEMINI_MODEL = 'gemini-3.5-flash'; // Free tier: ~15 istek/dk, 1500 istek/gün (Temmuz 2026 itibarıyla)
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+// Ücretsiz kotanın çok altında, isteğe göre Vercel env değişkeniyle ayarlanabilir sınırlar.
+// Not: Serverless fonksiyon her "cold start"ta sıfırlanır; bu yüzden kesin değil, ekstra
+// bir tampon katmandır — asıl garanti billing'in kapalı olmasıdır.
+const MAX_DAILY_REQUESTS = parseInt(process.env.MAX_DAILY_REQUESTS || '200', 10);
+const MAX_REQUESTS_PER_CODE_PER_DAY = parseInt(process.env.MAX_REQUESTS_PER_CODE_PER_DAY || '5', 10);
+
+// Modül seviyesinde (warm instance ömrü boyunca) basit sayaçlar.
+const usageState = globalThis.__cvAnalizUsage || (globalThis.__cvAnalizUsage = {
+  day: null,
+  totalCount: 0,
+  perCode: new Map(),
+});
+
+function getUtcDayKey() {
+  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
+}
+
+function resetIfNewDay() {
+  const today = getUtcDayKey();
+  if (usageState.day !== today) {
+    usageState.day = today;
+    usageState.totalCount = 0;
+    usageState.perCode = new Map();
+  }
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,6 +62,19 @@ export default async function handler(req, res) {
   const requireCode = validCodes.length > 0;
   if (requireCode && (!accessCode || !validCodes.includes(accessCode.trim()))) {
     return res.status(402).json({ error: 'Geçersiz veya eksik erişim kodu.' });
+  }
+
+  // --- Maliyet/kota güvenlik katmanı ---
+  // Ücretsiz kotayı tek bir kaynağın tüketmesini engellemek için ekstra sınırlar.
+  resetIfNewDay();
+  const codeKey = (accessCode && accessCode.trim()) || 'anon';
+  const codeCount = usageState.perCode.get(codeKey) || 0;
+
+  if (usageState.totalCount >= MAX_DAILY_REQUESTS) {
+    return res.status(429).json({ error: 'Günlük analiz limitine ulaşıldı. Lütfen yarın tekrar deneyin.' });
+  }
+  if (codeCount >= MAX_REQUESTS_PER_CODE_PER_DAY) {
+    return res.status(429).json({ error: 'Bu kod için günlük analiz limitine ulaşıldı. Lütfen yarın tekrar deneyin.' });
   }
 
   if (!cvText || cvText.trim().length < 50) {
@@ -105,6 +152,10 @@ Her listede 3-6 madde olsun. Maddeler kısa ve net cümleler olsun.`;
       console.error('JSON parse hatası. Ham çıktı:', raw);
       return res.status(502).json({ error: 'Analiz sonucu işlenemedi. Lütfen tekrar deneyin.' });
     }
+
+    // Sadece başarılı (gerçekten Gemini'ye giden) istekleri say.
+    usageState.totalCount += 1;
+    usageState.perCode.set(codeKey, codeCount + 1);
 
     return res.status(200).json(parsed);
   } catch (err) {
