@@ -105,7 +105,17 @@ analyzeBtn.addEventListener('click', async () => {
       }),
     });
 
-    const data = await res.json();
+    const rawBody = await res.text();
+    let data;
+    try {
+      data = JSON.parse(rawBody);
+    } catch (parseErr) {
+      console.error('Sunucudan JSON olmayan yanıt:', res.status, rawBody.slice(0, 300));
+      loading.style.display = 'none';
+      formCard.style.display = 'block';
+      showError(`Sunucu beklenmedik bir yanıt döndürdü (durum: ${res.status}). Analiz muhtemelen zaman aşımına uğradı, lütfen tekrar dene.`);
+      return;
+    }
 
     if (!res.ok) {
       loading.style.display = 'none';

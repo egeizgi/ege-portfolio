@@ -15,6 +15,13 @@
 const GEMINI_MODEL = 'gemini-3.5-flash'; // Free tier: ~15 istek/dk, 1500 istek/gün (Temmuz 2026 itibarıyla)
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
+// Vercel'in varsayılan fonksiyon süresi bazı planlarda 10sn olabiliyor; Gemini'nin
+// tam JSON analiz üretmesi bazen bunu aşabiliyor ve bu da istemcide "sunucuya
+// ulaşılamadı" gibi görünen bir zaman aşımına yol açıyor. Süreyi güvenli tarafta tutuyoruz.
+export const config = {
+  maxDuration: 30,
+};
+
 // Ücretsiz kotanın çok altında, isteğe göre Vercel env değişkeniyle ayarlanabilir günlük limit.
 // Not: Serverless fonksiyon her "cold start"ta sıfırlanır; bu yüzden kesin değil, ekstra
 // bir tampon katmandır — asıl garanti billing'in kapalı olmasıdır.
