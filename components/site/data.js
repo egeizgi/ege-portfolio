@@ -24,12 +24,40 @@ export const NAV = [
   { href: "/iletisim", label: "İletişim" },
 ];
 
+export const EXPERIENCE = [
+  {
+    company: "HAVELSAN",
+    role: "Stajyer – Yapay Zeka / Görüntü İşleme",
+    period: "Tem 2026 — Ağu 2026",
+    duration: "2 ay",
+    location: "Ankara · Yerinde",
+    bullets: [
+      "Off-road resim ve video segmentasyonu yaptım.",
+      "Farklı veri setleri üzerinde model (SAM, SegFormer) pipeline'ları kurdum ve değerlendirdim.",
+    ],
+    tags: ["Python", "PyTorch", "OpenCV", "Hugging Face Transformers", "Bilgisayarla Görme", "Deep Learning"],
+  },
+  {
+    company: "Sisoft Healthcare Information Systems",
+    role: "AI/ML Stajyeri",
+    period: "Kas 2025 — Haz 2026",
+    duration: "8 ay",
+    location: "Ankara · Yerinde",
+    bullets: [
+      "Veri analizi ve keşifsel veri analizi süreçlerini yürüttüm.",
+      "RAG sistemleri üzerine deneyler yaptım.",
+      "FAISS ve ChromaDB ile semantik arama algoritmaları üzerinde çalıştım.",
+    ],
+    tags: ["Python", "NLP", "RAG", "FAISS", "ChromaDB"],
+  },
+];
+
 export const FOCUS_AREAS = [
   {
     icon: "neurology",
     title: "Yapay Zeka",
-    text: "Yapay zeka modellerinin nasıl çalıştığını öğrenmek ve onları gerçek problemlere nasıl uygulayabileceğimi keşfetmek.",
-    tags: ["#AI", "#Python"],
+    text: "Görüntü segmentasyonu (SAM, SegFormer) ve RAG tabanlı semantik arama gibi alanlarda stajlarda edindiğim deneyimi derinleştirmek.",
+    tags: ["#ComputerVision", "#NLP"],
   },
   {
     icon: "monitoring",
@@ -47,6 +75,8 @@ export const FOCUS_AREAS = [
 
 export const SKILLS = [
   { group: "Programlama Dilleri", items: ["C", "Python", "JavaScript"], strong: ["C", "Python"] },
+  { group: "Derin Öğrenme & Görüntü İşleme", items: ["PyTorch", "Hugging Face Transformers", "OpenCV", "SAM", "SegFormer"], strong: ["PyTorch"] },
+  { group: "NLP & Semantik Arama", items: ["RAG", "FAISS", "ChromaDB"], strong: ["RAG"] },
   { group: "Araçlar", items: ["Git", "GitHub"], strong: [] },
 ];
 

@@ -7,7 +7,7 @@ const HERO_TECH = ["Python", "C", "JavaScript"];
 
 const FACTS = [
   { value: "3.", unit: "sınıf", label: "Bilgisayar Mühendisliği", sub: PROFILE.school },
-  { value: "AI", unit: "· ML", label: "İlgi Alanlarım", sub: "Yapay zeka ve veri bilimi" },
+  { value: "2", unit: "staj", label: "Yapay Zeka / ML", sub: "HAVELSAN · Sisoft" },
   { value: "3", unit: "dil", label: "C · Python · JS", sub: "Günlük kullandıklarım" },
   { value: "GMT", unit: "+3", label: "Ankara, Türkiye", sub: "Europe/Istanbul" },
 ];

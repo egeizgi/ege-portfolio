@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Layout from "@/components/site/Layout";
-import { HOBBIES, INTERESTS, PROFILE, SKILLS } from "@/components/site/data";
+import { EXPERIENCE, HOBBIES, INTERESTS, PROFILE, SKILLS } from "@/components/site/data";
 import { Chip, Icon } from "@/components/site/ui";
 
 const card = "print-flat rounded-xl bg-card p-6 shadow-sm";
@@ -20,13 +20,13 @@ function SectionTitle({ icon, children, meta }) {
 export default function Resume() {
   const summary = [
     { label: "Eğitim", value: PROFILE.year, unit: "", sub: `${PROFILE.department} · ${PROFILE.school}` },
-    { label: "İlgi Alanları", value: "AI", unit: "· ML · Veri", sub: "Yapay zeka ve veri bilimi" },
+    { label: "Staj Deneyimi", value: String(EXPERIENCE.length), unit: "staj", sub: EXPERIENCE.map((e) => e.company.split(" ")[0]).join(" · ") },
     { label: "Ana Diller", value: "C", unit: "· Python · JS", sub: "Sistem ve veri" },
     { label: "Konum", value: "Ankara", unit: "GMT+3", sub: PROFILE.timezone },
   ];
 
   return (
-    <Layout title="Özgeçmiş" description="Ege İzgi — Bilgisayar Mühendisliği öğrencisi. Eğitim, ilgi alanları ve teknik yetkinlikler.">
+    <Layout title="Özgeçmiş" description="Ege İzgi — Bilgisayar Mühendisliği öğrencisi. Staj deneyimi, eğitim ve teknik yetkinlikler.">
       <div className="relative w-full overflow-hidden pb-12 pt-8">
         <div className="pointer-events-none absolute -top-24 right-1/4 h-96 w-96 rounded-full bg-accent/5 blur-3xl" />
         <div className="relative z-10 mx-auto max-w-6xl px-5 md:px-6">
@@ -69,6 +69,52 @@ export default function Resume() {
           <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
             {/* SOL KOLON */}
             <div className="flex flex-col gap-8 lg:col-span-7">
+              <section className="flex flex-col gap-6">
+                <SectionTitle icon="work" meta="KRONOLOJİK">
+                  Staj Deneyimi
+                </SectionTitle>
+                <div className="relative space-y-6 pl-6 before:absolute before:bottom-3 before:left-2 before:top-3 before:w-0.5 before:bg-card-high">
+                  {EXPERIENCE.map((job, i) => (
+                    <div key={job.company} className="relative">
+                      <span
+                        className={`absolute -left-[21px] top-1.5 h-3 w-3 rounded-full ring-4 ring-canvas ${
+                          i === 0 ? "bg-accent" : "bg-outline-soft"
+                        }`}
+                      />
+                      <div className={`${card} transition-all hover:shadow-md`}>
+                        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+                          <span
+                            className={`rounded px-2 py-0.5 font-mono text-badge ${
+                              i === 0 ? "bg-accent-soft text-on-accent-soft" : "bg-card-mid text-muted"
+                            }`}
+                          >
+                            {job.period} · {job.duration}
+                          </span>
+                          <span className="flex items-center gap-1 text-label-sm text-muted">
+                            <Icon name="location_on" className="text-[14px]" /> {job.location}
+                          </span>
+                        </div>
+                        <h3 className="font-display text-headline-sm text-fg">{job.role}</h3>
+                        <div className="mb-3 text-body-sm font-medium text-accent">{job.company}</div>
+                        <ul className="mb-4 space-y-2">
+                          {job.bullets.map((b) => (
+                            <li key={b} className="flex items-start gap-2 text-body-sm text-muted">
+                              <Icon name="check_circle" className="mt-0.5 shrink-0 text-[16px] text-accent" />
+                              {b}
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {job.tags.map((t) => (
+                            <Chip key={t}>{t}</Chip>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
               <section className="flex flex-col gap-6">
                 <SectionTitle icon="school">Eğitim</SectionTitle>
                 <div className={`${card} flex flex-col justify-between gap-6 md:flex-row md:items-center`}>
