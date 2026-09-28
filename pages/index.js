@@ -1,13 +1,13 @@
 import Link from "next/link";
 import Layout from "@/components/site/Layout";
-import { FOCUS_AREAS, PROFILE, PROJECTS, STATUS_LABEL } from "@/components/site/data";
-import { Chip, CopyEmailButton, Eyebrow, Icon, PulseDot, StatusBadge, btn } from "@/components/site/ui";
+import { FOCUS_AREAS, PROFILE } from "@/components/site/data";
+import { Chip, CopyEmailButton, Eyebrow, Icon, PulseDot, btn } from "@/components/site/ui";
 
-const HERO_TECH = ["Python", "C", "Next.js", "Gemini API"];
+const HERO_TECH = ["Python", "C", "JavaScript"];
 
 const FACTS = [
   { value: "3.", unit: "sınıf", label: "Bilgisayar Mühendisliği", sub: PROFILE.school },
-  { value: String(PROJECTS.filter((p) => p.status === "live").length), unit: "araç", label: "Yayında AI Projesi", sub: "egeizgi.dev üzerinde" },
+  { value: "AI", unit: "· ML", label: "İlgi Alanlarım", sub: "Yapay zeka ve veri bilimi" },
   { value: "3", unit: "dil", label: "C · Python · JS", sub: "Günlük kullandıklarım" },
   { value: "GMT", unit: "+3", label: "Ankara, Türkiye", sub: "Europe/Istanbul" },
 ];
@@ -45,8 +45,8 @@ function HeroCard() {
           <Icon name="neurology" className="text-[16px]" />
         </div>
         <div className="flex flex-col">
-          <span className="text-label-sm font-semibold text-fg">Gemini API</span>
-          <span className="font-mono text-[10px] text-muted">3 canlı AI aracı</span>
+          <span className="text-label-sm font-semibold text-fg">Yapay Zeka</span>
+          <span className="font-mono text-[10px] text-muted">ML · Veri Bilimi</span>
         </div>
       </div>
       <div className="absolute -right-3 top-10 flex items-center gap-2 rounded-xl bg-card px-3 py-2 shadow-lg sm:-right-6">
@@ -60,62 +60,13 @@ function HeroCard() {
       </div>
       <div className="absolute -left-3 top-[58%] flex items-center gap-2 rounded-xl bg-card px-3 py-1.5 shadow-lg sm:-left-6">
         <span className="h-2 w-2 rounded-full bg-accent" />
-        <span className="text-label-sm font-semibold text-fg">Next.js</span>
+        <span className="text-label-sm font-semibold text-fg">JavaScript</span>
       </div>
     </div>
   );
 }
 
-function FeaturedProject({ project, wide = false }) {
-  return (
-    <a
-      href={project.href}
-      className={`group flex flex-col justify-between rounded-2xl bg-card p-7 shadow-md transition-all duration-300 hover:shadow-xl md:p-8 ${
-        wide ? "lg:col-span-8" : "lg:col-span-4"
-      }`}
-    >
-      <div>
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <StatusBadge status={project.status} label={STATUS_LABEL[project.status]} />
-            {project.tags.slice(0, wide ? 3 : 1).map((t) => (
-              <Chip key={t} className="px-2.5 py-1">{t}</Chip>
-            ))}
-          </div>
-          <Icon name={project.icon} className="text-[22px] text-outline transition-colors group-hover:text-accent" />
-        </div>
-        <h3 className="mb-3 font-display text-headline-md text-fg transition-colors group-hover:text-accent">
-          {project.title} <span className="text-muted">— {project.tagline}</span>
-        </h3>
-        <p className="mb-6 max-w-2xl text-body-md text-muted">{project.description}</p>
-      </div>
-      {wide ? (
-        <div className="grid grid-cols-1 gap-3 rounded-xl bg-card-low p-4 sm:grid-cols-3">
-          {project.highlights.map((h) => (
-            <div key={h} className="flex items-start gap-2 text-body-sm text-fg">
-              <Icon name="check_circle" className="mt-0.5 text-[16px] text-accent" />
-              {h}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((t) => (
-            <Chip key={t} className="bg-card-high">{t}</Chip>
-          ))}
-        </div>
-      )}
-      <span className="mt-6 inline-flex items-center gap-1.5 text-label-md text-fg transition-colors group-hover:text-accent">
-        {project.status === "live" ? "Aracı dene" : "Detayları gör"}
-        <Icon name={project.status === "live" ? "open_in_new" : "arrow_forward"} className="text-[16px]" />
-      </span>
-    </a>
-  );
-}
-
 export default function Home() {
-  const [first, second, third, fourth] = PROJECTS;
-
   return (
     <Layout>
       <div className="relative mx-auto w-full max-w-6xl px-5 md:px-6">
@@ -132,19 +83,19 @@ export default function Home() {
                 </span>
               </div>
               <h1 className="font-display text-display-mobile text-fg md:text-display">
-                Merhaba, ben {PROFILE.name}. Yapay zekayı <span className="text-accent">gerçek problemlere</span> uygulayan
-                araçlar geliştiriyorum.
+                Merhaba, ben {PROFILE.name}. <span className="text-accent">Yapay zeka</span> ve veri bilimi üzerine öğreniyor,
+                üretiyorum.
               </h1>
               <p className="max-w-xl text-body-lg text-muted">{PROFILE.bio}</p>
               <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link href="/projeler" className={btn.primary}>
-                  Projelerimi İncele
+                <Link href="/ozgecmis" className={btn.primary}>
+                  Özgeçmişe Göz At
                   <Icon name="arrow_forward" className="text-[18px]" />
                 </Link>
-                <Link href="/ozgecmis" className={btn.secondary}>
-                  <Icon name="description" className="text-[18px] text-accent" />
-                  Özgeçmişe Göz At
-                </Link>
+                <a href={PROFILE.github} target="_blank" rel="noopener noreferrer" className={btn.secondary}>
+                  <Icon name="code" className="text-[18px] text-accent" />
+                  GitHub
+                </a>
               </div>
               <div className="flex flex-wrap items-center gap-2 pt-4">
                 <span className="mr-2 font-mono text-badge uppercase tracking-wider text-outline">Odaklandığım teknolojiler:</span>
@@ -175,39 +126,16 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ÖNE ÇIKAN PROJELER */}
-        <section className="pb-16 pt-20" id="projeler">
-          <div className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div className="max-w-xl space-y-2">
-              <Eyebrow>Portfolyo Seçkisi</Eyebrow>
-              <h2 className="font-display text-headline-lg text-fg">Öne Çıkan Projeler</h2>
-              <p className="text-body-md text-muted">
-                Uçtan uca kendim geliştirdiğim, yayında olan ve herkesin ücretsiz kullanabildiği yapay zeka araçları.
-              </p>
-            </div>
-            <Link href="/projeler" className="inline-flex items-center gap-2 text-label-md text-accent hover:text-accent-hover">
-              Tüm Projeleri Görüntüle
-              <Icon name="arrow_forward" className="text-[16px]" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-            <FeaturedProject project={first} wide />
-            <FeaturedProject project={second} />
-            <FeaturedProject project={third} />
-            <FeaturedProject project={fourth} wide />
-          </div>
-        </section>
-
         {/* ODAK ALANLARI */}
         <section className="py-16">
           <div className="mb-12 max-w-2xl space-y-2">
             <Eyebrow>İlgi & Uzmanlık Alanları</Eyebrow>
             <h2 className="font-display text-headline-lg text-fg">Üzerinde Çalıştığım Alanlar</h2>
             <p className="text-body-md text-muted">
-              Donanıma yakın C kodundan kullanıcıya dokunan web arayüzüne kadar, her katmanı anlamaya çalışıyorum.
+              Donanıma yakın C kodundan veri ve makine öğrenmesine kadar, her katmanı anlamaya çalışıyorum.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {FOCUS_AREAS.map((area) => (
               <div
                 key={area.title}

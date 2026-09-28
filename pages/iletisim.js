@@ -6,7 +6,7 @@ import { CopyEmailButton, Icon } from "@/components/site/ui";
 const TOPICS = [
   "Proje / İş Birliği",
   "Staj veya İş Fırsatı",
-  "Projelerim Hakkında Geri Bildirim",
+  "Tanışma / Networking",
   "Genel Sohbet",
 ];
 
